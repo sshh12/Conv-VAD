@@ -4,8 +4,8 @@
 
 ## Usage
 
-#### Download
-`pip install TODO`
+#### Install
+`pip install https://github.com/sshh12/Conv-VAD/releases/download/v0.1.0/conv-vad-0.1.0.tar.gz`
 
 #### Script
 ```python
@@ -40,3 +40,9 @@ for i in range(0, audio.shape[0] - RATE, RATE):
 
 #### Training
 `python model/train.py --data_path data --epochs 25`
+
+## Related
+
+* [wiseman/py-webrtcvad](https://github.com/wiseman/py-webrtcvad)
+* [belisariops/ConvVAD](https://github.com/belisariops/ConvVAD)
+* [gvashkevich/vad](https://github.com/gvashkevich/vad)
