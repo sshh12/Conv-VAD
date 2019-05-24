@@ -105,3 +105,4 @@ venv.bak/
 
 # Conv VAD
 *.h5
+*.npy
