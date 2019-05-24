@@ -11,7 +11,6 @@ pwr_to_db = librosa.core.power_to_db
 
 
 RATE = 16000
-CHUNK = RATE // 4
 
 
 def save_example(dataset_path, audio_frame, label):
@@ -40,20 +39,20 @@ def make_labels(wav_path=None, data_path=None):
     stream = p.open(format=pyaudio.paInt16,
                     channels=1,
                     rate=RATE,
-                    frames_per_buffer=CHUNK,
+                    frames_per_buffer=RATE,
                     output=True)
 
     wav_data = wavfile.read(wav_path)[1].astype(np.uint16)
     data_length = wav_data.shape[0]
 
     def random_idx():
-        return np.random.randint(CHUNK * 4, data_length - CHUNK)
+        return np.random.randint(0, data_length - RATE)
 
     idx = random_idx()
 
     while True:
 
-        audio_frame = wav_data[idx-CHUNK*3:idx+CHUNK]
+        audio_frame = wav_data[idx:idx+RATE]
         stream.write(audio_frame.tobytes())
 
         opt = input('quit (q) / voice (v) / noise (n) > ')
