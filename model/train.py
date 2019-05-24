@@ -1,3 +1,8 @@
+"""
+Train a Conv-VAD model.
+
+$ python model/train.py --data_path data --epochs 25
+"""
 import numpy as np
 import click
 import glob
@@ -16,7 +21,9 @@ SHAPE = (400, 126, 1)
 
 
 def get_model():
-
+    """
+    Create the VAD model architecture.
+    """
     inp = Input(shape=SHAPE)
 
     x = Conv2D(64, (9, 9))(inp)

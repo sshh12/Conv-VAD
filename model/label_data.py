@@ -1,3 +1,8 @@
+"""
+Create training data interactively with a .wav file.
+
+$ python model/label_data.py --wav_path path/to/audio.wav --data_path data
+"""
 from datetime import datetime
 from scipy.io import wavfile
 import pyaudio
