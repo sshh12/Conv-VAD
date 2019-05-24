@@ -14,6 +14,13 @@ import librosa
 do_melspec = librosa.feature.melspectrogram
 pwr_to_db = librosa.core.power_to_db
 
+# Use older model to optimize labeling
+try:
+    import conv_vad
+    vad = conv_vad.VAD()
+except ImportError:
+    vad = None
+
 
 RATE = 16000
 
@@ -58,6 +65,15 @@ def make_labels(wav_path=None, data_path=None):
     while True:
 
         audio_frame = wav_data[idx:idx+RATE]
+
+        if vad is not None:
+            score = vad.score_speech(audio_frame)
+            print('score =', score)
+            # Skip confident classifications
+            if score < 0.25 or score > 0.6:
+                idx = random_idx()
+                continue
+
         stream.write(audio_frame.tobytes())
 
         opt = input('quit (q) / voice (v) / noise (n) > ')
