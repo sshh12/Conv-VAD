@@ -43,7 +43,7 @@ class VAD:
         norm_melspec = pwr_to_db(melspec, ref=np.max)
         spectrogram = (1 - (norm_melspec / -80.0))[:-16, :].reshape(*SHAPE)
 
-        model_input = np.array([(spectrogram - 0.648) / 0.089])
+        model_input = np.array([(spectrogram - 0.643) / 0.094])
         pred = self.model.predict(model_input)
 
         return pred[0][0]

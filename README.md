@@ -5,7 +5,7 @@
 ## Usage
 
 #### Install
-`pip install https://github.com/sshh12/Conv-VAD/releases/download/v0.1.0/conv-vad-0.1.0.tar.gz`
+`pip install https://github.com/sshh12/Conv-VAD/releases/download/v0.1.1/conv-vad-0.1.1.tar.gz`
 
 #### Script
 ```python

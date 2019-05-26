@@ -93,7 +93,7 @@ def train(data_path=None, model_path=None, epochs=None, batch_size=None):
     print('Y stats ->', Y.mean(), Y.std(), Y.shape)
 
     # Precomputed Normalization
-    X = (X - 0.648) / 0.089
+    X = (X - 0.643) / 0.094
 
     model = get_model()
     model.fit(X, Y,

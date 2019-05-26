@@ -43,7 +43,15 @@ def save_example(dataset_path, audio_frame, label):
               required=True,
               help='Where to save training examples.',
               type=click.Path())
-def make_labels(wav_path=None, data_path=None):
+@click.option('--assist/--no-assist',
+              required=False,
+              help='Use previous model to assist labeling.',
+              default=False)
+@click.option('--random/--no-random',
+              required=False,
+              help='Label segments randomly.',
+              default=True)
+def make_labels(wav_path=None, data_path=None, assist=None, random=None):
 
     os.makedirs(data_path, exist_ok=True)
 
@@ -57,10 +65,18 @@ def make_labels(wav_path=None, data_path=None):
     wav_data = wavfile.read(wav_path)[1].astype(np.uint16)
     data_length = wav_data.shape[0]
 
-    def random_idx():
-        return np.random.randint(0, data_length - RATE)
+    if not random:
+        counter = {'pos': 0}
 
-    idx = random_idx()
+    def next_idx():
+        if random:
+            return np.random.randint(0, data_length - RATE)
+        else:
+            prev = counter['pos']
+            counter['pos'] += RATE
+            return prev
+
+    idx = next_idx()
 
     while True:
 
@@ -69,24 +85,28 @@ def make_labels(wav_path=None, data_path=None):
         if vad is not None:
             score = vad.score_speech(audio_frame)
             print('score =', score)
+
             # Skip confident classifications
-            if score < 0.25 or score > 0.6:
-                idx = random_idx()
-                continue
+            if assist:
+                if score < 0.25 or score > 0.6:
+                    idx = next_idx()
+                    continue
 
         stream.write(audio_frame.tobytes())
 
-        opt = input('quit (q) / voice (v) / noise (n) > ')
+        opt = input('quit (q) / skip (s) / voice (v) / noise (n) > ').lower()
         if 'q' in opt:
             stream.close()
             p.terminate()
             break
+        elif 's' in opt:
+            idx = next_idx()
         elif 'v' in opt:
             save_example(data_path, audio_frame, 'voice')
-            idx = random_idx()
+            idx = next_idx()
         elif 'n' in opt:
             save_example(data_path, audio_frame, 'noise')
-            idx = random_idx()
+            idx = next_idx()
 
 
 if __name__ == '__main__':
