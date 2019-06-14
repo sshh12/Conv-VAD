@@ -7,7 +7,21 @@
 #### Install
 `pip install https://github.com/sshh12/Conv-VAD/releases/download/v0.1.1/conv-vad-0.1.1.tar.gz`
 
-#### Script
+#### Usage
+
+##### API
+
+```python
+import conv_vad
+
+vad = conv_vad.VAD()
+
+# Audio frame is numpy array of 1 sec, 16k, single channel audio data.
+score = vad.score_speech(audio_frame)
+```
+
+##### Demo
+
 ```python
 from scipy.io import wavfile
 import numpy as np
